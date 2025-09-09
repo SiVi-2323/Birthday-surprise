@@ -54,9 +54,14 @@
                  border-radius: 16px;
                  overflow: hidden;}
     .photo{
-            width: 200%;
-            aspect-ratio: 500px;   /* keep aspect ratio */
-            object-fit: fit;  /* show full image */
+           width: 100%;
+           height: auto;        /* scale naturally */
+           object-fit: contain; /* show full image without cropping */
+           background: #000;    /* fill gaps if aspect ratio differs */
+           transform: scale(1.08);
+           opacity: 0;
+           filter: saturate(1.05) contrast(1.02);
+           animation: reveal 1.6s ease forwards .2s;
     }
     @keyframes reveal{to{opacity:1; transform:scale(1)}}
 
@@ -296,6 +301,7 @@
 </script>
 </body>
 </html>
+
 
 
 
