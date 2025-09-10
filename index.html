@@ -6,28 +6,26 @@
   <title>Happy Birthday 💖</title>
   <meta name="theme-color" content="#0f172a" />
 
-  <!-- ================= CSS ================= -->
   <style>
     :root {
-      --bg1: #0f172a; /* slate-900 */
-      --bg2: #1f2937; /* gray-800 */
-      --accent: #f472b6; /* pink-400 */
-      --accent2: #38bdf8; /* sky-400 */
-      --text: #f8fafc; /* slate-50 */
+      --bg1: #0f172a;
+      --bg2: #1f2937;
+      --accent: #f472b6;
+      --accent2: #38bdf8;
+      --text: #f8fafc;
       --card: #111827ee;
     }
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    html, body { height: 100%; margin: 0; }
     body {
-      margin: 0;
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
       color: var(--text);
-      background:
-        radial-gradient(1200px 800px at 70% -10%, rgba(56,189,248,.25), transparent),
-        radial-gradient(900px 600px at -10% 90%, rgba(244,114,182,.18), transparent),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
+      background: radial-gradient(1200px 800px at 70% -10%, rgba(56,189,248,.25), transparent),
+                  radial-gradient(900px 600px at -10% 90%, rgba(244,114,182,.18), transparent),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow: hidden;
     }
+
     .container {
       position: relative;
       height: 100%;
@@ -68,24 +66,27 @@
       text-align: center;
       padding: 18px 18px 14px;
     }
+
     .photo-wrap {
       position: relative;
       width: 100%;
-      height: auto;
-      border-radius: 16px;
       overflow: hidden;
+      border-radius: 16px;
     }
+
     .photo {
       width: 100%;
-      height: 500px;
-      object-fit: contain; /* show full image */
+      max-height: 500px;    /* limit height */
+      object-fit: contain;  /* show full image */
       background: #000;
-      transform: scale(1.08);
       opacity: 0;
-      filter: saturate(1.05) contrast(1.02);
       animation: reveal 1.6s ease forwards .2s;
+      border-radius: 16px;
     }
-    @keyframes reveal { to { opacity:1; transform:scale(1); } }
+
+    @keyframes reveal {
+      to { opacity: 1; transform: scale(1); }
+    }
 
     .msg {
       margin: 14px 6px 4px;
@@ -95,7 +96,6 @@
     }
     .msg strong { color: #fff; }
 
-    /* CTA */
     .chip {
       display: inline-block;
       margin-top: 8px;
@@ -107,10 +107,8 @@
       text-decoration: none;
     }
 
-    /* Confetti */
     #confetti { position: fixed; inset: 0; pointer-events: none; }
 
-    /* Music button */
     .music-btn {
       position: fixed;
       bottom: 18px;
@@ -128,7 +126,6 @@
       color: #062e0e;
     }
 
-    /* Tap-to-start overlay */
     .tap-start {
       position: fixed;
       inset: 0;
@@ -139,6 +136,7 @@
       z-index: 20;
     }
     .tap-start.show { display: flex; }
+
     .tap-card {
       background: #111827;
       color: #fff;
@@ -159,21 +157,29 @@
       color: #062034;
     }
 
-    /* Falling hearts/photos */
-    .heart, .falling {
+    /* Floating hearts */
+    .heart {
       position: fixed;
-      top: -50px;
+      top: -10px;
+      font-size: 24px;
+      color: red;
       animation: fall linear forwards;
     }
     @keyframes fall {
       to { transform: translateY(100vh); opacity: 0; }
     }
-    .heart { font-size: 24px; color: red; }
+
+    /* Falling items */
+    .falling {
+      position: fixed;
+      top: -100px;
+      animation: fall linear forwards;
+    }
   </style>
 </head>
-
 <body>
   <canvas id="confetti"></canvas>
+
   <div class="container">
     <h1 class="title">Happy Birthday, My Love ✨</h1>
 
@@ -181,10 +187,7 @@
       <div class="photo-wrap">
         <img id="photo" class="photo" src="hisphoto.jpg" alt="His Photo" />
       </div>
-      <p class="msg">
-        <strong>Dear ❤️,</strong> may your day be filled with love, laughter, and all your favorite things.
-        I’m so grateful for you—today and always. 💖
-      </p>
+      <p class="msg"><strong>Dear ❤️,</strong> may your day be filled with love, laughter, and all your favorite things. I’m so grateful for you—today and always. 💖</p>
       <a class="chip" id="wa" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
     </section>
 
@@ -196,7 +199,7 @@
     <source src="favorite.mp3" type="audio/mpeg" />
   </audio>
 
-  <!-- Overlay -->
+  <!-- Autoplay fallback -->
   <div id="tapStart" class="tap-start" role="dialog" aria-modal="true" aria-label="Start music">
     <div class="tap-card">
       <h3>Tap to start the music 🎶</h3>
@@ -205,11 +208,11 @@
     </div>
   </div>
 
-  <!-- ================= JS ================= -->
   <script>
-    // Replace your files here
+    // ===== Replace with your files =====
     const PHOTO_SRC = 'me_u.jpg';
-    const SONG_SRC  = 'Tamil.mp3';
+    const SONG_SRC = 'Tamil.mp3';
+    // ===================================
 
     const img = document.getElementById('photo');
     const audio = document.getElementById('music');
@@ -218,19 +221,17 @@
     const tapPlay = document.getElementById('tapPlay');
     const wa = document.getElementById('wa');
 
-    // Apply user assets
     img.src = PHOTO_SRC;
     audio.querySelector('source').src = SONG_SRC;
     audio.load();
 
-    // WhatsApp share
     wa.href = 'https://wa.me/?text=' + encodeURIComponent('Open this 💖 Birthday surprise!');
 
-    // Autoplay logic
     function tryAutoplay() {
       audio.muted = false;
       return audio.play();
     }
+
     window.addEventListener('load', () => {
       tryAutoplay().then(() => {
         musicBtn.setAttribute('aria-pressed','true');
@@ -255,52 +256,46 @@
       document.removeEventListener('click', once);
     }, { passive:true });
 
-    // Music toggle
     musicBtn.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().then(()=>{
           musicBtn.setAttribute('aria-pressed','true');
           musicBtn.textContent = '⏸ Music';
-        });
+        }).catch(()=>{});
       } else {
         audio.pause();
         musicBtn.setAttribute('aria-pressed','false');
         musicBtn.textContent = '▶ Music';
       }
-    });
+    }, { passive:true });
 
-    // Confetti
+    // --- Confetti ---
     function launchConfetti() {
       const canvas = document.getElementById('confetti');
       const ctx = canvas.getContext('2d');
       let W, H, parts = [], running = true;
       function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
       resize();
-      addEventListener('resize', resize);
-
+      addEventListener('resize', resize, {passive:true});
       const colors = ["#f472b6","#38bdf8","#fb923c","#34d399","#f59e0b","#a78bfa"];
       for(let i=0;i<220;i++) parts.push(spawn());
-      function spawn(){
-        return {x:Math.random()*W, y:-10, r:4+Math.random()*6, vx:-2+Math.random()*4,
-                vy:2+Math.random()*3, rot:Math.random()*360,
-                col:colors[(Math.random()*colors.length)|0]};
-      }
+      function spawn(){ return {x:Math.random()*W,y:-10,r:4+Math.random()*6,vx:-2+Math.random()*4,vy:2+Math.random()*3,rot:Math.random()*360,col:colors[(Math.random()*colors.length)|0]}; }
       (function tick(){
         if(!running) return;
         requestAnimationFrame(tick);
         ctx.clearRect(0,0,W,H);
         for(const p of parts){
-          p.x += p.vx; p.y += p.vy; p.rot += 5; p.vy += 0.02;
+          p.x+=p.vx; p.y+=p.vy; p.rot+=5; p.vy+=0.02;
           ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
-          ctx.fillStyle = p.col; ctx.fillRect(-p.r,-p.r/2,p.r*1.8,p.r*0.7);
+          ctx.fillStyle=p.col; ctx.fillRect(-p.r,-p.r/2,p.r*1.8,p.r*0.7);
           ctx.restore();
         }
-        parts = parts.filter(p=> p.y < H+30);
+        parts = parts.filter(p=> p.y<H+30);
       })();
       setTimeout(()=>{ running=false; ctx.clearRect(0,0,W,H); },4000);
     }
 
-    // Falling hearts
+    // --- Hearts ---
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -308,32 +303,34 @@
       heart.style.left = Math.random()*100 + "vw";
       heart.style.animationDuration = (3+Math.random()*2)+"s";
       document.body.appendChild(heart);
-      setTimeout(()=>heart.remove(),5000);
+      setTimeout(() => heart.remove(), 5000);
     }
-    setInterval(createHeart,500);
+    setInterval(createHeart, 500);
 
-    // Falling photos + hearts
+    // --- Falling photos/hearts ---
     const photoList = [ "us.jpg", "mine1.png", "mine2.png" ];
     function createFallingItem() {
       let item = document.createElement("div");
-      if (Math.random() > 0.5) {
+      if (Math.random()>0.5) {
         item.innerText = "❤️";
         item.style.fontSize = (20+Math.random()*30)+"px";
         item.style.color = "red";
       } else {
         let img = document.createElement("img");
         img.src = photoList[Math.floor(Math.random()*photoList.length)];
-        img.style.width="40px"; img.style.height="40px";
-        img.style.borderRadius="50%"; img.style.objectFit="cover";
+        img.style.width = "40px";
+        img.style.height = "40px";
+        img.style.borderRadius = "50%";
+        img.style.objectFit = "cover";
         item.appendChild(img);
       }
-      item.className="falling";
-      item.style.left=Math.random()*100+"vw";
-      item.style.animationDuration=(3+Math.random()*2)+"s";
+      item.className = "falling";
+      item.style.left = Math.random()*100 + "vw";
+      item.style.animationDuration = (3+Math.random()*2)+"s";
       document.body.appendChild(item);
-      setTimeout(()=>item.remove(),5000);
+      setTimeout(() => item.remove(), 5000);
     }
-    setInterval(createFallingItem,600);
+    setInterval(createFallingItem, 600);
   </script>
 </body>
 </html>
